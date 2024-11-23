@@ -53,3 +53,51 @@ function showSuggestion(target, suggestion) {
     }
   }, 5000);
 }
+
+// api.js
+
+// Function to check if the OpenAI API key is set
+function getApiKey() {
+  return localStorage.getItem("openai_api_key");
+}
+
+// Function to send OpenAI API requests
+async function fetchOpenAIResponse(prompt, isSpellCheck) {
+  const apiKey = getApiKey(); // Get API key from localStorage
+
+  if (!apiKey) {
+    return { error: "API key is not set." };
+  }
+
+  const apiPrompt = isSpellCheck
+    ? `Correct the spelling mistakes in the following text: ${prompt}`
+    : `Suggest the next word in the sentence: ${prompt}`;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "text-davinci-003",  // Use appropriate model
+        prompt: apiPrompt,
+        max_tokens: 50,  // Customize token length
+        temperature: 0.7,  // Adjust creativity level
+      }),
+    });
+
+    const data = await response.json();
+    if (data.choices && data.choices[0].text) {
+      return { suggestion: data.choices[0].text.trim() };
+    } else {
+      return { error: "No suggestion found." };
+    }
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+// Expose function to be used by background.js or popup.js
+window.fetchOpenAIResponse = fetchOpenAIResponse;
