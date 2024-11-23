@@ -1,0 +1,19 @@
+.ai-suggestion-box {
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .ai-suggestion-tooltip {
+    font-family: Arial, sans-serif;
+    color: #333;
+    border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
